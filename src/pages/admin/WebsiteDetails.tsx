@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
-
-import { Website, MetaTag } from '../../types/marketing';
+import { Website } from '../../types/marketing';
 import { StatsCard } from '../../components/marketing/StatsCard';
+import StaticAnalitics from '../mixed/staticAnalitics';
 import { websiteService } from '../../services/firebase';
 
 const formatDate = (dateValue: any) => {
@@ -41,8 +41,8 @@ const WebsiteDetails: React.FC = () => {
      try {
        setLoading(true);
        const websiteData = await websiteService.getWebsite(id);
-       console.log('Website data:', websiteData); // Dodajemy log
-       console.log('Created at:', websiteData?.createdAt); // Sprawdzamy pole createdAt
+       console.log('Website data:', websiteData);
+       console.log('Created at:', websiteData?.createdAt);
        setWebsite(websiteData);
      } catch (err) {
        console.error('Error loading website:', err);
@@ -112,71 +112,10 @@ const WebsiteDetails: React.FC = () => {
      </div>
 
      {/* Statystyki */}
-     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-       <StatsCard
-         title="Liczba odwiedzin"
-         value={website.analytics?.visitors || 0}
-         color="blue"
-       />
-       <StatsCard
-         title="Współczynnik odrzuceń"
-         value={`${website.analytics?.bounceRate || 0}%`}
-         color="red"
-       />
-       <StatsCard
-         title="Średni czas"
-         value={website.analytics?.avgTimeOnSite || "0:00"}
-         color="green"
-       />
-       <StatsCard
-         title="Status"
-         value={website.status}
-         color={website.status === 'active' ? 'green' : 'yellow'}
-       />
+     <div className="mt-8">
+       <StaticAnalitics />
      </div>
-
-     {/* Szczegóły strony */}
-     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-       {/* Informacje podstawowe */}
-       <Card>
-         <h2 className="text-xl font-bold mb-4">Informacje podstawowe</h2>
-         <div className="space-y-4">
-           <div>
-             <h3 className="text-sm text-gray-400">Opis strony</h3>
-             <p className="text-white">{website.description || 'Brak opisu'}</p>
-           </div>
-           <div>
-             <h3 className="text-sm text-gray-400">Ostatnia analiza</h3>
-             <p className="text-white">
-               {formatDate(website.lastAnalysis)}
-             </p>
-           </div>
-           <div>
-             <h3 className="text-sm text-gray-400">Data dodania</h3>
-             <p className="text-white">
-               {website.createdAt ? formatDate(website.createdAt) : 'Data niedostępna'}
-             </p>
-           </div>
-         </div>
-       </Card>
-
-       {/* Meta tagi */}
-       <Card>
-         <h2 className="text-xl font-bold mb-4">Meta tagi</h2>
-         <div className="space-y-3">
-           {website.metaTags && website.metaTags.length > 0 ? (
-             website.metaTags.map((tag: MetaTag, index: number) => (
-               <div key={index} className="bg-gray-700 p-3 rounded-lg">
-                 <div className="text-sm text-gray-400 mb-1">{tag.name}</div>
-                 <div className="text-white">{tag.content}</div>
-               </div>
-             ))
-           ) : (
-             <p className="text-gray-400">Brak meta tagów</p>
-           )}
-         </div>
-       </Card>
-     </div>
+    
    </div>
  );
 };

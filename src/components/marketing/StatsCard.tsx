@@ -24,7 +24,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
   return (
     <Card>
       <div className="text-center">
-        <h3 className="text-lg text-gray-400">{title}</h3>
+        <h3 className="text-lg text-gray-800">{title}</h3>
         <p className={`text-3xl font-bold ${colorClasses[color]}`}>{value}</p>
       </div>
     </Card>

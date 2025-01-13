@@ -1,13 +1,12 @@
-// src/pages/admin/Campaigns.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FiChevronLeft } from "react-icons/fi";
 import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
 import { useAuth } from '../../contexts/AuthContext';
 import { Campaign } from '../../types/marketing';
 import { Table } from '../../components/ Table';
 import campaignService from '../../services/campaignService';
-
 
 const Campaigns: React.FC = () => {
   const { user } = useAuth();
@@ -56,7 +55,15 @@ const Campaigns: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-white">Kampanie</h1>
+        <div className="flex items-center gap-4">
+          <Button
+            variant="secondary"
+            onClick={() => navigate("/pl/admin/dashboard")}
+          >
+            <FiChevronLeft className="text-xl h-7" />
+          </Button>
+          <h1 className="text-3xl font-bold">Kampanie</h1>
+        </div>
         <Button 
           variant="primary"
           onClick={() => navigate('/pl/admin/campaigns/new')}
@@ -70,12 +77,12 @@ const Campaigns: React.FC = () => {
           <input 
             type="text" 
             placeholder="Szukaj kampanii..."
-            className="px-4 py-2 bg-gray-700 rounded-lg text-white"
+            className="px-4 py-2 rounded-lg border"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <select 
-            className="px-4 py-2 bg-gray-700 rounded-lg text-white"
+            className="px-4 py-2 rounded-lg border"
             value={filterPlatform}
             onChange={(e) => setFilterPlatform(e.target.value)}
           >
@@ -85,7 +92,7 @@ const Campaigns: React.FC = () => {
             <option value="Instagram">Instagram</option>
           </select>
           <select 
-            className="px-4 py-2 bg-gray-700 rounded-lg text-white"
+            className="px-4 py-2 rounded-lg border"
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
           >

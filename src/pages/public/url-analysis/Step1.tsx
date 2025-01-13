@@ -1,86 +1,104 @@
-// src/pages/public/url-analysis/Step1.tsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '../../../components/Button';
-import { Card } from '../../../components/Card';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "../../../components/Button";
+import { Card } from "../../../components/Card";
+import { TextField, StepHeader } from "../../../components/form";
 
 const Step1: React.FC = () => {
   const navigate = useNavigate();
-  const [url, setUrl] = useState('');
-  const [error, setError] = useState('');
+  const [url, setUrl] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isTouched, setIsTouched] = useState(false);
 
-  const validateUrl = (url: string): boolean => {
+  const validateUrl = (url: string) => {
+    if (!url.trim()) {
+      return "Proszę podać adres URL";
+    }
     try {
-      new URL(url);
-      return true;
+      const urlObj = new URL(url);
+      if (!["http:", "https:"].includes(urlObj.protocol)) {
+        return "URL musi zaczynać się od http:// lub https://";
+      }
+      return "";
     } catch {
-      return false;
+      return "Proszę podać poprawny adres URL";
     }
   };
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newUrl = e.target.value;
     setUrl(newUrl);
-    if (error) {
-      setError('');
-    }
-  };
 
-  const handleNextStep = () => {
-    if (!url.trim()) {
-      setError('Proszę podać adres URL');
+    if (!newUrl.trim()) {
+      setError("Proszę podać adres URL");
       return;
     }
 
-    if (!validateUrl(url)) {
-      setError('Proszę podać poprawny adres URL (np. https://example.com)');
-      return;
+    if (newUrl.startsWith("http://") || newUrl.startsWith("https://")) {
+      setError("");
+    } else if (isTouched) {
+      setError(validateUrl(newUrl));
     }
-
-    sessionStorage.setItem('analysisUrl', url);
-    navigate('/pl/public/url-analysis-step2');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleBlur = () => {
+    setIsTouched(true);
+    setError(validateUrl(url));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    handleNextStep();
+    const validationError = validateUrl(url);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setError("");
+      sessionStorage.setItem("analysisUrl", url);
+      navigate("/pl/public/url-analysis-step2");
+    } catch (err) {
+      setError("Wystąpił błąd podczas przetwarzania URL");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="px-4 py-8">
+    <div className="container mx-auto px-4">
+      <StepHeader
+        step={1}
+        title="Rozpocznij analizę strony"
+        description="Podaj adres URL strony, którą chcesz przeanalizować."
+      />
+
       <Card>
-        <form onSubmit={handleSubmit}>
-          <h2 className="text-2xl font-bold mb-4">Krok 1: Podaj adres URL</h2>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-300 mb-1">
-              URL strony do analizy
-            </label>
-            <input
-              type="url"
-              placeholder="https://example.com"
-              className={`w-full px-4 py-2 bg-gray-700 border rounded-lg text-gray-100 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors ${
-                error ? 'border-red-500' : 'border-gray-600'
-              }`}
-              value={url}
-              onChange={handleUrlChange}
-              required
-            />
-            {error && (
-              <p className="mt-2 text-sm text-red-400">
-                {error}
-              </p>
-            )}
-          </div>
-          <div className="flex justify-between items-center">
-            <p className="text-sm text-gray-400">
-              Wprowadź pełny adres URL zaczynający się od http:// lub https://
-            </p>
-            <Button 
-              type="submit"
-              variant="primary" 
-              disabled={!url.trim()}
-            >
-              Dalej
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <TextField
+            label="URL strony do analizy"
+            type="url"
+            placeholder="https://example.com"
+            value={url}
+            onChange={handleUrlChange}
+            onBlur={handleBlur}
+            disabled={isLoading}
+            error={error}
+            required
+            helpText="Wprowadź pełny adres URL zaczynający się od http:// lub https://"
+          />
+
+          {isLoading && (
+            <div className="flex justify-center">
+              <div className="loading loading-spinner loading-lg"></div>
+            </div>
+          )}
+
+          <div className="flex justify-end pt-4">
+            <Button type="submit" variant="primary" disabled={isLoading}>
+              {isLoading ? "Sprawdzanie..." : "Dalej"}
             </Button>
           </div>
         </form>

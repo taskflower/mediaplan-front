@@ -13,8 +13,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     const baseClasses = 'rounded font-medium transition-colors'
     
     const variantClasses = {
-      primary: 'bg-blue-500 hover:bg-blue-600 text-white',
-      secondary: 'bg-gray-500 hover:bg-gray-600 text-white',
+      primary: 'bg-gray-50 hover:bg-gray-300 text-gray-900 border border-gray-600',
+      secondary: 'bg-gray-900 hover:bg-gray-600 text-white',
       danger: 'bg-red-500 hover:bg-red-600 text-white'
     }
   

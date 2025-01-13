@@ -1,52 +1,18 @@
-import { FC, Suspense } from 'react'
-import { useParams, Navigate } from 'react-router-dom'
-import { layouts } from '../layouts'
-import { pages } from '../pages'
-import { LayoutType } from '../types/routing'
+import { FC, ReactNode } from 'react';
+import { AdminLayout } from '../layouts/AdminLayout';
+import { PublicLayout } from '../layouts/PublicLayout';
 
 interface PageWrapperProps {
-  defaultLayout: LayoutType
+  defaultLayout: 'admin' | 'public';
+  children: ReactNode;
 }
 
-export const PageWrapper: FC<PageWrapperProps> = ({ defaultLayout }) => {
-  const params = useParams<{ lang: string; page: string }>()
-  const { lang, page } = params
-  const layout = defaultLayout
-  
-  console.log('PageWrapper params:', { lang, layout, page })
-  
-  // Sprawdzamy czy mamy wszystkie wymagane parametry
-  if (!lang || !page) {
-    console.log('Missing required params:', { lang, layout, page })
-    return <Navigate to="/pl/public/home" replace />
-  }
-
-  // Sprawdzamy czy layout istnieje
-  if (!(layout in layouts)) {
-    console.log('Layout not found:', layout)
-    return <Navigate to="/pl/public/home" replace />
-  }
-
-  const Layout = layouts[layout]
-  const pageComponents = pages[layout]
-  
-  // Sprawdzamy czy strona istnieje w danym layoucie
-  if (!pageComponents || !(page in pageComponents)) {
-    console.log('Page not found:', page)
-    return <Navigate to="/pl/public/home" replace />
-  }
-
-  const Page = pageComponents[page]
+export const PageWrapper: FC<PageWrapperProps> = ({ defaultLayout, children }) => {
+  const Layout = defaultLayout === 'admin' ? AdminLayout : PublicLayout;
 
   return (
     <Layout>
-      <Suspense fallback={
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="loading loading-spinner loading-lg"></div>
-        </div>
-      }>
-        <Page />
-      </Suspense>
+      {children}
     </Layout>
-  )
-}
+  );
+};

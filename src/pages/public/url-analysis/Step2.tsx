@@ -3,11 +3,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../../components/Button";
 import { Card } from "../../../components/Card";
+import { StepHeader, UrlPreview, CheckboxField } from "../../../components/form";
 
 const Step2: React.FC = () => {
   const navigate = useNavigate();
   const [url, setUrl] = useState("");
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const storedUrl = sessionStorage.getItem("analysisUrl");
@@ -22,52 +24,52 @@ const Step2: React.FC = () => {
     navigate("/pl/public/url-analysis-step1");
   };
 
-  const handleFinish = () => {
+  const handleNextStep = () => {
     if (!isAuthorized) {
+      setError("Proszę potwierdzić uprawnienia przed kontynuacją");
       return;
     }
-    navigate("/pl/public/url-analysis-step3"); // Zmiana z url-analysis-processing na step3
+    navigate("/pl/public/url-analysis-step3");
   };
+
   return (
-    <div className="px-4 py-8">
+    <div className="container mx-auto px-4">
+      <StepHeader
+        step={2}
+        title="Potwierdzenie adresu URL"
+        description="Proszę potwierdzić, że chcesz przeanalizować poniższy adres URL."
+      />
+
       <Card>
-        <div>
-          <h2 className="text-2xl font-bold mb-4">
-            Krok 2: Potwierdź adres URL
-          </h2>
-          <p className="text-gray-300 mb-4">
-            Proszę potwierdzić, że chcesz przeanalizować poniższy adres URL:
-          </p>
-          <p className="bg-gray-700 p-3 rounded-lg text-white mb-6">{url}</p>
+        <div className="space-y-6">
+          {error && (
+            <div className="bg-red-500/10 border border-red-500 text-red-500 p-4 rounded-lg">
+              {error}
+            </div>
+          )}
 
-          {/* Checkbox deklaracji */}
-          <div className="mb-6">
-            <label className="flex items-start gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={isAuthorized}
-                onChange={(e) => setIsAuthorized(e.target.checked)}
-                className="mt-1 checkbox checkbox-primary"
-              />
-              <span className="text-sm text-gray-300">
-                Oświadczam, że jestem osobą uprawnioną do przeglądania i
-                analizowania podanej strony internetowej. Rozumiem, że analiza
-                strony bez odpowiednich uprawnień może naruszać warunki jej
-                użytkowania.
-              </span>
-            </label>
-          </div>
+          <UrlPreview url={url} />
 
-          <div className="flex justify-between">
+          <CheckboxField
+            label="Oświadczam, że jestem osobą uprawnioną do przeglądania i analizowania podanej strony internetowej."
+            checked={isAuthorized}
+            onChange={(e) => {
+              setIsAuthorized(e.target.checked);
+              if (error) setError("");
+            }}
+            error={!isAuthorized && error}
+          />
+
+          <div className="flex justify-between pt-4">
             <Button variant="secondary" onClick={handlePreviousStep}>
               Wstecz
             </Button>
             <Button
               variant="primary"
-              onClick={handleFinish}
+              onClick={handleNextStep}
               disabled={!isAuthorized}
             >
-              {!isAuthorized ? "Potwierdź uprawnienia" : "Potwierdź"}
+              {!isAuthorized ? "Potwierdź uprawnienia" : "Dalej"}
             </Button>
           </div>
         </div>

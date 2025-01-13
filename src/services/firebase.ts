@@ -64,6 +64,21 @@ export const websiteService = {
       ...websiteDoc.data() 
     } as Website;
   },
+  getWebsiteByUrl: async (url: string): Promise<Website | null> => {
+    const websitesRef = collection(db, 'websites');
+    const q = query(websitesRef, where('url', '==', url));
+    const querySnapshot = await getDocs(q);
+    
+    if (querySnapshot.empty) {
+      return null;
+    }
+
+    const websiteDoc = querySnapshot.docs[0];
+    return { 
+      id: websiteDoc.id, 
+      ...websiteDoc.data() 
+    } as Website;
+  },
 
   // Update - Aktualizacja strony
   updateWebsite: async (websiteId: string, updateData: Partial<Website>): Promise<void> => {

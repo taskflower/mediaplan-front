@@ -1,8 +1,7 @@
-// src/pages/admin/Websites.tsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { FiChevronLeft } from "react-icons/fi"; // Import ikony
 import { Card } from "../../components/Card";
-
 import { Button } from "../../components/Button";
 import { useAuth } from "../../contexts/AuthContext";
 import { StatsCard } from "../../components/marketing/StatsCard";
@@ -62,7 +61,15 @@ const Websites: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-white">Strony WWW</h1>
+        <div className="flex items-center gap-4">
+          <Button
+            variant="secondary"
+            onClick={() => navigate("/pl/admin/dashboard")}
+          >
+            <FiChevronLeft className="text-xl h-7" /> {/* Ikona zamiast "<" */}
+          </Button>
+          <h1 className="text-3xl font-bold">Strony WWW</h1>
+        </div>
         <Button
           variant="primary"
           onClick={() => navigate("/pl/public/url-analysis-step1")}
@@ -97,7 +104,7 @@ const Websites: React.FC = () => {
         <Table
           headers={["Nazwa", "URL", "Status", "Ostatnia analiza"]}
           data={websites.map((website) => ({
-            id: website.id, // Dodajemy id do danych
+            id: website.id,
             nazwa: website.name,
             url: website.url,
             status: website.status,

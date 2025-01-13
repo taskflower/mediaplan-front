@@ -1,4 +1,3 @@
-// src/pages/admin/Dashboard.tsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../../components/Card';
@@ -12,8 +11,8 @@ const Dashboard: React.FC = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-white">Marketing Planner</h1>
-          <p className="text-gray-400 mt-2">Witaj, {user?.email}</p>
+          <h1 className="text-3xl font-bold">Marketing Planner</h1>
+          <p className="mt-2">Witaj, {user?.email}</p>
         </div>
       </div>
 
@@ -23,8 +22,8 @@ const Dashboard: React.FC = () => {
             className="cursor-pointer p-6 text-center"
             onClick={() => navigate('/pl/admin/websites')}
           >
-            <h2 className="text-xl font-bold text-white mb-2">Strony WWW</h2>
-            <p className="text-gray-400">Zarządzaj i analizuj strony internetowe</p>
+            <h2 className="text-xl font-bold mb-2">Strony WWW</h2>
+            <p>Zarządzaj i analizuj strony internetowe</p>
           </div>
         </Card>
 
@@ -33,8 +32,8 @@ const Dashboard: React.FC = () => {
             className="cursor-pointer p-6 text-center"
             onClick={() => navigate('/pl/admin/campaigns')}
           >
-            <h2 className="text-xl font-bold text-white mb-2">Kampanie</h2>
-            <p className="text-gray-400">Zarządzaj kampaniami marketingowymi</p>
+            <h2 className="text-xl font-bold mb-2">Kampanie</h2>
+            <p>Zarządzaj kampaniami marketingowymi</p>
           </div>
         </Card>
 
@@ -43,8 +42,8 @@ const Dashboard: React.FC = () => {
             className="cursor-pointer p-6 text-center"
             onClick={() => navigate('/pl/admin/analytics')}
           >
-            <h2 className="text-xl font-bold text-white mb-2">Analityka</h2>
-            <p className="text-gray-400">Zobacz statystyki i raporty</p>
+            <h2 className="text-xl font-bold mb-2">Analityka</h2>
+            <p>Zobacz statystyki i raporty</p>
           </div>
         </Card>
       </div>

@@ -19,8 +19,8 @@ export const AdminLayout: FC<PropsWithChildren> = ({ children }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
-      <nav className="fixed top-0 left-0 right-0 bg-opacity-90 backdrop-blur-sm bg-gray-900 border-b border-gray-700 z-50">
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      <nav className="fixed top-0 left-0 right-0 bg-opacity-90 backdrop-blur-sm bg-gray-950 border-b border-gray-200 z-50">
         <div className="mx-auto px-2 sm:px-4">
           <div className="flex items-center justify-between h-14 sm:h-16">
             <div className="flex items-center space-x-2 sm:space-x-4">
@@ -92,7 +92,7 @@ export const AdminLayout: FC<PropsWithChildren> = ({ children }) => {
           </div>
         )}
       </nav>
-      <main className="pt-14 sm:pt-16 min-h-screen">
+      <main className="pt-14 sm:pt-16 min-h-screen bg-gray-50">
         <div className="mx-auto px-2 sm:px-4 py-4 sm:py-8">
           {children}
         </div>
