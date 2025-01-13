@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiChevronLeft } from "react-icons/fi";
+import { FiChevronLeft } from 'react-icons/fi';
 import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
+import { TextField, SelectField } from '../../components/form';
 import { useAuth } from '../../contexts/AuthContext';
 import { Campaign } from '../../types/marketing';
 import { Table } from '../../components/ Table';
@@ -40,7 +41,6 @@ const Campaigns: React.FC = () => {
     const matchesPlatform = filterPlatform === 'all' || campaign.platforms.includes(filterPlatform);
     const matchesStatus = filterStatus === 'all' || campaign.status === filterStatus;
     const matchesSearch = campaign.name.toLowerCase().includes(searchTerm.toLowerCase());
-    
     return matchesPlatform && matchesStatus && matchesSearch;
   });
 
@@ -74,33 +74,42 @@ const Campaigns: React.FC = () => {
 
       <Card title="Filtry">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <input 
-            type="text" 
-            placeholder="Szukaj kampanii..."
-            className="px-4 py-2 rounded-lg border"
+          {/* Filtr: Wyszukiwanie */}
+          <TextField
+            label="Wyszukaj kampanię"
+            placeholder="Wprowadź nazwę kampanii..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            className="mt-1"
           />
-          <select 
-            className="px-4 py-2 rounded-lg border"
+
+          {/* Filtr: Platformy */}
+          <SelectField
+            label="Platforma"
+            options={[
+              { value: 'all', label: 'Wszystkie platformy' },
+              { value: 'Google Ads', label: 'Google Ads' },
+              { value: 'Facebook', label: 'Facebook' },
+              { value: 'Instagram', label: 'Instagram' },
+            ]}
             value={filterPlatform}
             onChange={(e) => setFilterPlatform(e.target.value)}
-          >
-            <option value="all">Wszystkie platformy</option>
-            <option value="Google Ads">Google Ads</option>
-            <option value="Facebook">Facebook</option>
-            <option value="Instagram">Instagram</option>
-          </select>
-          <select 
-            className="px-4 py-2 rounded-lg border"
+            className="mt-1"
+          />
+
+          {/* Filtr: Status */}
+          <SelectField
+            label="Status"
+            options={[
+              { value: 'all', label: 'Wszystkie statusy' },
+              { value: 'active', label: 'Aktywne' },
+              { value: 'draft', label: 'Szkice' },
+              { value: 'completed', label: 'Zakończone' },
+            ]}
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-          >
-            <option value="all">Wszystkie statusy</option>
-            <option value="active">Aktywne</option>
-            <option value="draft">Szkice</option>
-            <option value="completed">Zakończone</option>
-          </select>
+            className="mt-1"
+          />
         </div>
       </Card>
 

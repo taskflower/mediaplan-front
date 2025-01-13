@@ -4,3 +4,4 @@ export * from './TextArea';
 export * from './Checkbox';
 export * from './UrlPreview';
 export * from './StepHeader';
+export * from './SelectField';
