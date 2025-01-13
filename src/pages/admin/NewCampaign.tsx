@@ -42,6 +42,7 @@ const NewCampaign: React.FC = () => {
       if (!user?.uid) return;
       try {
         const websitesData = await websiteService.getWebsites(user.uid);
+        console.log('Websites data:', websitesData); // Debug danych
         setWebsites(websitesData);
         if (websitesData.length > 0) {
           setFormData((prev) => ({ ...prev, websiteId: websitesData[0].id }));
@@ -120,7 +121,7 @@ const NewCampaign: React.FC = () => {
             label="Strona"
             options={websites.map((website) => ({
               value: website.id,
-              label: website.name,
+              label: website.url || 'Brak nazwy', // Domyślna nazwa, jeśli `name` jest puste
             }))}
             value={formData.websiteId}
             onChange={(e) => setFormData((prev) => ({ ...prev, websiteId: e.target.value }))}
